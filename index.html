@@ -50,6 +50,11 @@
       <button type="button" class="btn btn-ghost btn-small" @click="prUrl = null" :aria-label="t('common.close')" x-text="t('common.close')"></button>
     </div>
 
+    <div class="pr-banner" x-show="savedDirect" x-cloak>
+      <span x-text="t('edit.saved_direct')"></span>
+      <button type="button" class="btn btn-ghost btn-small" @click="savedDirect = false" :aria-label="t('common.close')" x-text="t('common.close')"></button>
+    </div>
+
     <div class="state" x-show="loading" x-cloak>
       <p x-text="t('state.loading')"></p>
     </div>

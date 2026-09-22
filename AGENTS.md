@@ -43,6 +43,7 @@ Directorio web de estaciones de radio de Guadalajara (ZMG), México. Combina:
 - Teléfonos y WhatsApp se guardan en E.164 (`52` + 10 dígitos); `dias` de programas en ISO (1=Lunes ... 7=Domingo).
 - Tipos de contacto válidos: `telefono`, `whatsapp`, `telegram`, `instagram`, `facebook`, `x`, `threads`, `tiktok`, `youtube`, `tunein`, `iheart`, `web`, `email`.
 - El frontend normaliza los datos al guardar (`normalizeStations` en `js/app.js`): allowlist de tipos, E.164, días válidos 1-7, y rechaza frecuencias duplicadas en la misma banda.
-- El guardado web crea rama + commit + PR (`saveChanges` en `js/github.js`); requiere `CONFIG.owner` configurado en `js/config.js` y un PAT con permisos Contents y Pull requests.
+- El guardado web (`saveChanges` en `js/github.js`) commitea **directo a `main`** si el token tiene permisos de escritura (`permissions.push`); si no, crea rama + commit + PR. Requiere `CONFIG.owner` configurado en `js/config.js` y un PAT con permisos Contents y Pull requests.
+- `.github/workflows/ci.yml` valida en cada push/PR: `pytest`, `ruff`, `node --check` y que el README esté sincronizado con el JSON (`generate_readme.py` + `git diff --exit-code`).
 - `index.html` tiene una CSP estricta (`script-src 'self' 'unsafe-eval'`): Alpine debe vivir en `js/vendor/` y las llamadas a la API solo a `api.github.com`. El `'unsafe-eval'` es obligatorio porque Alpine evalúa sus expresiones con `eval`/`new Function`; sin él la página no renderiza nada.
 - Si cambia el modelo de datos, actualizar a la vez: `scripts/migrate.py`, `scripts/generate_readme.py`, `js/app.js` (`normalizeStations`), los tests y la documentación.

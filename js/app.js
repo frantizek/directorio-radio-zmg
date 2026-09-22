@@ -186,6 +186,7 @@ document.addEventListener("alpine:init", function () {
       saveError: null,
       saveErrorKey: null,
       prUrl: null,
+      savedDirect: false,
 
       init: function () {
         this.loggedIn = github.isLoggedIn();
@@ -247,6 +248,8 @@ document.addEventListener("alpine:init", function () {
         this.deleteMarked = false;
         this.saveError = null;
         this.saveErrorKey = null;
+        this.prUrl = null;
+        this.savedDirect = false;
         window.scrollTo(0, 0);
       },
 
@@ -319,6 +322,7 @@ document.addEventListener("alpine:init", function () {
         this.saveError = null;
         this.saveErrorKey = null;
         this.prUrl = null;
+        this.savedDirect = false;
         this.view = "edit";
         window.scrollTo(0, 0);
       },
@@ -331,6 +335,7 @@ document.addEventListener("alpine:init", function () {
         this.saveError = null;
         this.saveErrorKey = null;
         this.prUrl = null;
+        this.savedDirect = false;
         this.view = "edit";
         window.scrollTo(0, 0);
       },
@@ -341,6 +346,8 @@ document.addEventListener("alpine:init", function () {
         }.bind(this));
         this.editing = null;
         this.deleteMarked = false;
+        this.prUrl = null;
+        this.savedDirect = false;
         this.view = (!this.isNew && st) ? "detail" : "list";
         window.scrollTo(0, 0);
       },
@@ -404,6 +411,7 @@ document.addEventListener("alpine:init", function () {
           var prUrl = await github.saveChanges(list);
           this.estaciones = list;
           this.prUrl = prUrl;
+          this.savedDirect = !prUrl;
           if (this.deleteMarked && !this.isNew) {
             this.editing = null;
             this.deleteMarked = false;

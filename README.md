@@ -17,8 +17,11 @@ Para desplegarlo en otro repositorio:
 ## Cómo editar los datos
 
 - La **fuente de verdad** es `data/estaciones.json`.
-- Desde la web (con sesión iniciada) puedes añadir, editar o eliminar estaciones, contactos y programas. Al guardar, la aplicación crea una rama, commitea el JSON y abre un **pull request** para revisar los cambios.
+- Desde la web (con sesión iniciada) puedes añadir, editar o eliminar estaciones, contactos y programas.
+  - Si tu token tiene **permisos de escritura** sobre el repositorio (p. ej. el dueño), los cambios se guardan **directamente en `main`**.
+  - Si no tiene permisos de escritura, la aplicación crea una rama, commitea el JSON y abre un **pull request** para revisar los cambios.
 - También puedes editar el JSON directamente y regenerar el README con el script.
+- Un workflow de **GitHub Actions** (`.github/workflows/ci.yml`) valida los datos en cada push/PR: tests, linter, sintaxis del frontend y que el README esté sincronizado con el JSON.
 
 ## Estructura del proyecto
 

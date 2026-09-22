@@ -100,6 +100,30 @@ var github = {
 
     var repoInfo = await this.api("/repos/" + owner + "/" + repo);
     var baseBranch = repoInfo.default_branch;
+    var canPush = !!(repoInfo.permissions && repoInfo.permissions.push);
+
+    var content = toBase64(JSON.stringify({ estaciones: estaciones }, null, 2) + "\n");
+
+    if (canPush) {
+      var fileSha;
+      try {
+        var file = await this.api("/repos/" + owner + "/" + repo + "/contents/" + path + "?ref=" + encodeURIComponent(baseBranch));
+        fileSha = file.sha;
+      } catch (e) {
+        if (e.status !== 404) throw e;
+      }
+      var putBody = {
+        message: "Actualizar directorio de estaciones desde el frontend",
+        content: content,
+        branch: baseBranch
+      };
+      if (fileSha) putBody.sha = fileSha;
+      await this.api("/repos/" + owner + "/" + repo + "/contents/" + path, {
+        method: "PUT",
+        body: JSON.stringify(putBody)
+      });
+      return null;
+    }
 
     var refInfo = await this.api("/repos/" + owner + "/" + repo + "/git/ref/heads/" + baseBranch.split("/").map(encodeURIComponent).join("/"));
     var baseSha = refInfo.object.sha;
@@ -119,7 +143,6 @@ var github = {
         if (e.status !== 404) throw e;
       }
 
-      var content = toBase64(JSON.stringify({ estaciones: estaciones }, null, 2) + "\n");
       var putBody = {
         message: "Actualizar directorio de estaciones desde el frontend",
         content: content,
