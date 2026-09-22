@@ -4,7 +4,9 @@ Directorio web de las principales estaciones de radio FM y AM de la Zona Metropo
 
 ## Sitio web
 
-El directorio se publica como página estática en GitHub Pages. Para desplegarlo:
+El directorio está publicado en GitHub Pages: **https://frantizek.github.io/directorio-radio-zmg/**
+
+Para desplegarlo en otro repositorio:
 
 1. Crea un repositorio en GitHub y sube este código.
 2. En **Settings → Pages → Source**, selecciona *Deploy from a branch* → `main` → `/` (root).
