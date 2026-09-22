@@ -1,7 +1,7 @@
 "use strict";
 
 const CONFIG = {
-  owner: "TU_USUARIO",
-  repo: "directorio_FM_AM",
+  owner: "frantizek",
+  repo: "directorio-radio-zmg",
   dataPath: "data/estaciones.json"
 };
