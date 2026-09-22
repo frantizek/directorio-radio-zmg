@@ -1,7 +1,9 @@
 """Regenera las tablas del README a partir de data/estaciones.json.
 
-El README deja de ser la fuente de verdad: se genera desde el JSON para que
-siempre refleje el estado actual de los datos.
+El README deja de ser la fuente de verdad: las tablas se generan desde el JSON
+para que siempre reflejen el estado actual de los datos. Solo se reemplazan las
+secciones delimitadas por los marcadores `<!-- TABLA_FM -->` y `<!-- TABLA_AM -->`;
+el resto del README (prosa, instrucciones) se conserva tal cual.
 """
 
 import json
@@ -10,15 +12,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "estaciones.json"
 README_PATH = ROOT / "README.md"
-
-HEADER = """# Lista de Estaciones de Radio en Guadalajara, México (AM y FM)
-
-A continuación se presenta una lista de las principales estaciones de radio en la Zona Metropolitana de Guadalajara (ZMG), con su frecuencia, nombre, teléfono fijo, enlace de WhatsApp y estado de verificación.
-
-**Nota:** Los números pueden cambiar. Se recomienda verificar en los sitios web oficiales para la información más reciente.
-
----
-"""
 
 
 def format_frecuencia(estacion):
@@ -93,19 +86,34 @@ def render_table(estaciones, columna_nombre):
 def generate(data):
     fm = [e for e in data["estaciones"] if e["banda"] == "FM"]
     am = [e for e in data["estaciones"] if e["banda"] == "AM"]
-    partes = [HEADER]
-    partes.append("## Estaciones de FM (Frecuencia Modulada)\n")
-    partes.append(render_table(fm, "Nombre de la Estación y Programas"))
-    partes.append("\n---\n")
-    partes.append("## Estaciones de AM (Amplitud Modulada)\n")
-    partes.append(render_table(am, "Nombre de la Estación"))
-    return "\n".join(partes) + "\n"
+    return {
+        "TABLA_FM": render_table(fm, "Nombre de la Estación y Programas"),
+        "TABLA_AM": render_table(am, "Nombre de la Estación"),
+    }
+
+
+def replace_between(text, marker, content):
+    start = f"<!-- {marker} -->"
+    end = f"<!-- /{marker} -->"
+    if start not in text or end not in text:
+        raise ValueError(f"Faltan los marcadores {start} ... {end} en el README")
+    before = text.split(start)[0]
+    after = text.split(end, 1)[1]
+    return before + start + "\n" + content + "\n" + end + after
+
+
+def update_readme(readme_text, tables):
+    text = readme_text
+    for marker, content in tables.items():
+        text = replace_between(text, marker, content)
+    return text
 
 
 def main():
     data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-    README_PATH.write_text(generate(data), encoding="utf-8")
-    print(f"README regenerado en '{README_PATH}'.")
+    readme = README_PATH.read_text(encoding="utf-8")
+    README_PATH.write_text(update_readme(readme, generate(data)), encoding="utf-8")
+    print(f"README actualizado en '{README_PATH}'.")
 
 
 if __name__ == "__main__":

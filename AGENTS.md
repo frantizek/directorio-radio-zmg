@@ -4,49 +4,45 @@ Guía de trabajo para agentes de IA en el proyecto **directorio-fm-am**.
 
 ## Overview
 
-Script Python que convierte un directorio de estaciones de radio de Guadalajara (ZMG),
-escrito en Markdown (`README.md`), en un archivo JSON estructurado
-(`radio_guadalajara.json`) con dos listas: `estaciones_fm` y `estaciones_am`.
+Directorio web de estaciones de radio de Guadalajara (ZMG), México. Combina:
 
-- `main.py` — script principal y único fuente de lógica.
-- `README.md` — documentación pública y fuente de datos de las tablas.
-- `pyproject.toml` — proyecto Python (>=3.11) gestionado con `uv`.
+- **`data/estaciones.json`** — fuente de verdad. Modelo: estación (`id`, `banda`, `frecuencia`, `nombre`, `verificado`) con `contactos[]` y `programas[]`. Cada contacto tiene `tipo`, `valor` y opcionalmente `etiqueta`/`verificado`. Cada programa tiene `nombre`, `horario`, `dias`, `locutores` y sus propios `contactos`.
+- **Frontend estático** en la raíz (`index.html`, `css/`, `js/`) — SPA con Alpine.js (auto-hospedado en `js/vendor/`), i18n es/en (`js/i18n.js`), y edición que guarda vía pull request usando la API de GitHub (`js/github.js`).
+- **Scripts Python** — `scripts/migrate.py` (migración única README → JSON) y `scripts/generate_readme.py` (JSON → README).
+- **`pyproject.toml`** — proyecto Python (>=3.11) gestionado con `uv`, sin dependencias de runtime.
 
 ## Comandos
 
-- `uv run main.py` — ejecuta la conversión Markdown -> JSON.
-- `uv add <paquete>` — añade una dependencia instalable.
+- `uv run python scripts/migrate.py` — migra las tablas del README a `data/estaciones.json`.
+- `uv run python scripts/generate_readme.py` — regenera las tablas del README desde el JSON.
 - `uv run pytest` — ejecuta los tests.
 - `uv run ruff check .` — linter.
 - `uv run ruff format .` — formateador.
-- `uv lock` / `uv sync` — sincroniza el lockfile y el entorno.
+- `node --check js/*.js` — verifica sintaxis del frontend.
+- `python -m http.server 8000` — sirve la web localmente (http://localhost:8000).
 
 ## Convenciones de código
 
 - Python 3.11+, PEP 8, gestionado con `uv` (NUNCA usar pip/pipenv/requirements.txt).
 - TODA dependencia debe declararse en `pyproject.toml` y reflejarse en `uv.lock`.
-- Docstrings y mensajes de usuario en español; identificadores y nombres de funciones
-  en inglés.
+- Docstrings y mensajes de usuario en español; identificadores y nombres de funciones en inglés.
 - No añadir comentarios al código salvo que se pidan explícitamente.
 - Mantener el código fuente ASCII: no emojis en código (sí están permitidos en README, datos y salida).
-- Codificación `utf-8` en toda lectura/escritura de archivos y `ensure_ascii=False`
-  al serializar JSON.
-- No reinventar: usar `pandas.read_html` + `markdown` como ya hace `main.py`.
+- Codificación `utf-8` en toda lectura/escritura de archivos y `ensure_ascii=False` al serializar JSON.
+- Frontend: JS estilo ES5 (`var`, `function`), `"use strict"`, sin build step, sin dependencias externas (Alpine auto-hospedado). Toda etiqueta de UI vía `t()` de `js/i18n.js`.
 
 ## Testing
 
-- Usar `pytest`. Añadir tests para `markdown_to_json` y `clean_column_names`.
+- Usar `pytest` para los scripts Python. Añadir tests para `migrate` y `generate_readme`.
+- Verificar sintaxis del frontend con `node --check js/*.js`.
 - Antes de dar por terminado un cambio, ejecutar `uv run pytest` y `uv run ruff check .`.
 
 ## Gotchas
 
-- `pd.read_html` devuelve más de una tabla por archivo; el código asume que la primera
-  tabla es FM (`estaciones_fm`) y la segunda AM (`estaciones_am`).
-- `clean_column_names` pasa las columnas a minúsculas y elimina emojis/símbolos no
-  alfanuméricos (necesario porque las cabeceras del README contienen iconos), preservando
-  acentos y `ñ` (la regex usa `\w` Unicode, no `[a-z0-9_]`).
-- `pd.read_html` recibe el HTML vía `io.StringIO`; en pandas 3.x pasar una cadena
-  directamente la trata como ruta de archivo y lanza `FileNotFoundError`.
-- Los NaN de pandas deben convertirse a `None` antes de escribir el JSON.
-- Si el formato de una tabla cambia (nuevas columnas, más de dos tablas), los tests
-  deben actualizarse junto al script.
+- `data/estaciones.json` es la fuente de verdad; el README se regenera con `generate_readme.py` (no editar las tablas a mano para datos).
+- Teléfonos y WhatsApp se guardan en E.164 (`52` + 10 dígitos); `dias` de programas en ISO (1=Lunes ... 7=Domingo).
+- Tipos de contacto válidos: `telefono`, `whatsapp`, `telegram`, `instagram`, `facebook`, `x`, `threads`, `tiktok`, `youtube`, `tunein`, `iheart`, `web`, `email`.
+- El frontend normaliza los datos al guardar (`normalizeStations` en `js/app.js`): allowlist de tipos, E.164, días válidos 1-7, y rechaza frecuencias duplicadas en la misma banda.
+- El guardado web crea rama + commit + PR (`saveChanges` en `js/github.js`); requiere `CONFIG.owner` configurado en `js/config.js` y un PAT con permisos Contents y Pull requests.
+- `index.html` tiene una CSP estricta (`script-src 'self'`): Alpine debe vivir en `js/vendor/` y las llamadas a la API solo a `api.github.com`.
+- Si cambia el modelo de datos, actualizar a la vez: `scripts/migrate.py`, `scripts/generate_readme.py`, `js/app.js` (`normalizeStations`), los tests y la documentación.

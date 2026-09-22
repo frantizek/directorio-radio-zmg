@@ -4,6 +4,8 @@ from scripts.generate_readme import (
     format_telefono,
     format_whatsapp,
     generate,
+    replace_between,
+    update_readme,
 )
 
 DATA_SAMPLE = {
@@ -54,6 +56,23 @@ DATA_SAMPLE = {
     ]
 }
 
+README_SAMPLE = """# Directorio de Radio ZMG
+
+Prosa que no debe tocarse.
+
+## Estaciones de FM (Frecuencia Modulada)
+
+<!-- TABLA_FM -->
+| vieja |
+<!-- /TABLA_FM -->
+
+## Estaciones de AM (Amplitud Modulada)
+
+<!-- TABLA_AM -->
+| vieja |
+<!-- /TABLA_AM -->
+"""
+
 
 def test_format_frecuencia():
     assert format_frecuencia({"banda": "FM", "frecuencia": "88.7"}) == "88.7 MHz"
@@ -97,11 +116,30 @@ def test_format_nombre_with_program():
     assert format_nombre(estacion) == "**Radio UdeG** <br/> ▸ *El Expreso de las Diez*"
 
 
-def test_generate_creates_two_tables():
-    md = generate(DATA_SAMPLE)
-    assert "## Estaciones de FM (Frecuencia Modulada)" in md
-    assert "## Estaciones de AM (Amplitud Modulada)" in md
-    assert "**ArrobaFM**" in md
-    assert "**Radio UdeG** <br/> ▸ *El Expreso de las Diez*" in md
-    assert "**General:** [33 2053 6975](http://wa.me/523320536975) ✅" in md
-    assert "**Radio 580**" in md
+def test_generate_returns_tables():
+    tables = generate(DATA_SAMPLE)
+    assert set(tables.keys()) == {"TABLA_FM", "TABLA_AM"}
+    assert "**ArrobaFM**" in tables["TABLA_FM"]
+    assert "**Radio UdeG** <br/> ▸ *El Expreso de las Diez*" in tables["TABLA_FM"]
+    assert (
+        "**General:** [33 2053 6975](http://wa.me/523320536975) ✅"
+        in tables["TABLA_FM"]
+    )
+    assert "**Radio 580**" in tables["TABLA_AM"]
+
+
+def test_update_readme_preserves_prose():
+    tables = generate(DATA_SAMPLE)
+    updated = update_readme(README_SAMPLE, tables)
+    assert "Prosa que no debe tocarse." in updated
+    assert "**ArrobaFM**" in updated
+    assert "**Radio 580**" in updated
+    assert "| vieja |" not in updated
+
+
+def test_replace_between_raises_without_markers():
+    try:
+        replace_between("sin marcadores", "TABLA_FM", "x")
+    except ValueError:
+        return
+    raise AssertionError("Debería lanzar ValueError sin marcadores")

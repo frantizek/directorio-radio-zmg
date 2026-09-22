@@ -1,6 +1,40 @@
-# Lista de Estaciones de Radio en Guadalajara, México (AM y FM)
+# Directorio de Radio ZMG
 
-A continuación se presenta una lista de las principales estaciones de radio en la Zona Metropolitana de Guadalajara (ZMG), con su frecuencia, nombre, teléfono fijo, enlace de WhatsApp y estado de verificación.
+Directorio web de las principales estaciones de radio FM y AM de la Zona Metropolitana de Guadalajara (ZMG), México. Incluye frecuencia, nombre, contactos (teléfono, WhatsApp, redes sociales, web, email), programas con horario y locutores, y estado de verificación.
+
+## Sitio web
+
+El directorio se publica como página estática en GitHub Pages. Para desplegarlo:
+
+1. Crea un repositorio en GitHub y sube este código.
+2. En **Settings → Pages → Source**, selecciona *Deploy from a branch* → `main` → `/` (root).
+3. Edita `js/config.js` y pon tu usuario de GitHub en `CONFIG.owner`.
+4. Crea un *fine-grained personal access token* con permisos **Contents: read/write** y **Pull requests: read/write** sobre el repositorio.
+5. En la web, usa el botón **Iniciar sesión** para pegar el token.
+
+## Cómo editar los datos
+
+- La **fuente de verdad** es `data/estaciones.json`.
+- Desde la web (con sesión iniciada) puedes añadir, editar o eliminar estaciones, contactos y programas. Al guardar, la aplicación crea una rama, commitea el JSON y abre un **pull request** para revisar los cambios.
+- También puedes editar el JSON directamente y regenerar el README con el script.
+
+## Estructura del proyecto
+
+- `data/estaciones.json` — datos estructurados (estaciones, contactos, programas).
+- `index.html`, `css/`, `js/` — frontend estático (Alpine.js, i18n es/en, cliente de la API de GitHub).
+- `scripts/migrate.py` — migración única de las tablas del README al JSON.
+- `scripts/generate_readme.py` — regenera las tablas del README desde el JSON.
+- `tests/` — pruebas de pytest.
+
+## Desarrollo
+
+```bash
+uv run python scripts/migrate.py        # README -> data/estaciones.json
+uv run python scripts/generate_readme.py # data/estaciones.json -> README
+uv run pytest                            # ejecutar tests
+uv run ruff check .                      # linter
+python -m http.server 8000               # servir la web localmente
+```
 
 **Nota:** Los números pueden cambiar. Se recomienda verificar en los sitios web oficiales para la información más reciente.
 
@@ -8,6 +42,7 @@ A continuación se presenta una lista de las principales estaciones de radio en 
 
 ## Estaciones de FM (Frecuencia Modulada)
 
+<!-- TABLA_FM -->
 | Frecuencia | Nombre de la Estación y Programas | ☎️ Teléfono Fijo | Número de WhatsApp | Verificado |
 | :--- |:------------------------------------------------| :--- |:---------------------------------------------------------|:-----------|
 | 88.7 MHz | **ArrobaFM** | 3338250887 | `No disponible` | ✅ |
@@ -40,11 +75,13 @@ A continuación se presenta una lista de las principales estaciones de radio en 
 | 105.9 MHz | **Éxtasis Digital** |  | [33 1404 0979](http://wa.me/523314040979) |  |
 | 106.7 MHz | **Máxima FM** |  | [33 1199 0735](http://wa.me/523311990735) |  |
 | 107.5 MHz | **Retro 107.5** |  | [33 3467 7220](http://wa.me/523334677220) | ✅ |
+<!-- /TABLA_FM -->
 
 ---
 
 ## Estaciones de AM (Amplitud Modulada)
 
+<!-- TABLA_AM -->
 | Frecuencia | Nombre de la Estación | ☎️ Teléfono Fijo | Número de WhatsApp | Verificado |
 | :--- |:------------------------------------------------| :--- |:---------------------------------------------------------|:-----------|
 | 580 kHz | **Radio 580** |  | [33 3122 1190](http://wa.me/523331221190) |  |
@@ -64,3 +101,4 @@ A continuación se presenta una lista de las principales estaciones de radio en 
 | 1340 kHz | **Frecuencia Deportiva** |  | [33 3122 5933](http://wa.me/523331225933) |  |
 | 1410 kHz | **Campirana** |  | [33 3812 2510](http://wa.me/523338122510) |  |
 | 1480 kHz | **Ondas de la Alegría** |  | [33 3678 0094](http://wa.me/523336780094) |  |
+<!-- /TABLA_AM -->
