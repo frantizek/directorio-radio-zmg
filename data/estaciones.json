@@ -24,6 +24,24 @@
       "programas": []
     },
     {
+      "id": "fm-89.5",
+      "banda": "FM",
+      "frecuencia": "89.5",
+      "nombre": "Radio Fórmula Jalisco",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "web",
+          "valor": "radioformula.com.mx/guadalajara/"
+        },
+        {
+          "tipo": "x",
+          "valor": "FormulaJalisco"
+        }
+      ],
+      "programas": []
+    },
+    {
       "id": "fm-89.9",
       "banda": "FM",
       "frecuencia": "89.9",
@@ -140,9 +158,35 @@
         {
           "tipo": "whatsapp",
           "valor": "525519516846"
+        },
+        {
+          "tipo": "x",
+          "valor": "ImagenRadioGdl"
+        },
+        {
+          "tipo": "facebook",
+          "valor": "ImagenRadioGuadalajara"
+        },
+        {
+          "tipo": "instagram",
+          "valor": "imagenradiogdl"
         }
       ],
-      "programas": []
+      "programas": [
+        {
+          "nombre": "Imagen Jalisco",
+          "horario": "17:30 - 18:30",
+          "dias": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "locutores": [],
+          "contactos": []
+        }
+      ]
     },
     {
       "id": "fm-94.7",
@@ -289,6 +333,29 @@
       "programas": []
     },
     {
+      "id": "fm-101.5",
+      "banda": "FM",
+      "frecuencia": "101.5",
+      "nombre": "W Radio Guadalajara",
+      "verificado": false,
+      "contactos": [],
+      "programas": [
+        {
+          "nombre": "Asi Las Cosas Jalisco",
+          "horario": "08:00 - 09:00",
+          "dias": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "locutores": [],
+          "contactos": []
+        }
+      ]
+    },
+    {
       "id": "fm-101.9",
       "banda": "FM",
       "frecuencia": "101.9",
@@ -343,23 +410,36 @@
         },
         {
           "tipo": "whatsapp",
-          "valor": "523320536975",
-          "etiqueta": "General",
-          "verificado": true
+          "valor": "523320536975"
+        },
+        {
+          "tipo": "x",
+          "valor": "RadioUdeG"
+        },
+        {
+          "tipo": "web",
+          "valor": "radio.udg.mx"
         }
       ],
       "programas": [
         {
           "nombre": "El Expreso de las Diez",
           "horario": null,
-          "dias": [],
-          "locutores": [],
+          "dias": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "locutores": [
+            "Alonso Torres"
+          ],
           "contactos": [
             {
               "tipo": "whatsapp",
               "valor": "523320303232",
-              "etiqueta": "Programa",
-              "verificado": true
+              "etiqueta": "Programa"
             }
           ]
         }
@@ -406,7 +486,7 @@
       "id": "fm-107.5",
       "banda": "FM",
       "frecuencia": "107.5",
-      "nombre": "Retro 107.5",
+      "nombre": "RMX",
       "verificado": true,
       "contactos": [
         {
@@ -414,7 +494,23 @@
           "valor": "523334677220"
         }
       ],
-      "programas": []
+      "programas": [
+        {
+          "nombre": "Coup D'Etat",
+          "horario": "07:30 - 10:00",
+          "dias": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "locutores": [
+            "Gonzalo Oliveros"
+          ],
+          "contactos": []
+        }
+      ]
     },
     {
       "id": "am-580",
@@ -471,14 +567,9 @@
       "id": "am-790",
       "banda": "AM",
       "frecuencia": "790",
-      "nombre": "W Radio",
+      "nombre": "Radio Fórmula Jalisco",
       "verificado": false,
-      "contactos": [
-        {
-          "tipo": "whatsapp",
-          "valor": "525513812222"
-        }
-      ],
+      "contactos": [],
       "programas": []
     },
     {
@@ -560,6 +651,15 @@
       "banda": "AM",
       "frecuencia": "1190",
       "nombre": "W Radio Guadalajara",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "am-1230",
+      "banda": "AM",
+      "frecuencia": "1230",
+      "nombre": "Radio Fórmula Jalisco",
       "verificado": false,
       "contactos": [],
       "programas": []
