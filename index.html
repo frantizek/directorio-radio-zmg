@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Directorio de estaciones de radio FM y AM de Guadalajara (ZMG), Mexico.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Directorio de Radio ZMG</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -308,11 +308,15 @@
   <div class="modal-backdrop" x-show="showLogin" x-cloak @click.self="showLogin = false" @keydown.window.escape="showLogin = false">
     <div class="modal" role="dialog" aria-modal="true" :aria-label="t('auth.login')">
       <h2 x-text="t('auth.login')"></h2>
+      <p class="muted" style="margin: 0;" x-text="t('auth.token_why')"></p>
       <p class="muted" style="margin: 0;" x-text="t('auth.token_help')"></p>
       <div class="field">
         <label x-text="t('auth.token_label')"></label>
         <input type="password" x-model="tokenInput" x-ref="tokenInput" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
       </div>
+      <p class="muted" style="margin: 0;">
+        <a href="https://github.com/frantizek/directorio-radio-zmg#c%C3%B3mo-editar-los-datos" target="_blank" rel="noopener noreferrer" x-text="t('auth.token_how')"></a>
+      </p>
       <p class="error" style="margin: 0;" role="alert" x-show="loginErrorKey || loginError" x-text="loginErrorKey ? t(loginErrorKey) : loginError"></p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" @click="showLogin = false" x-text="t('auth.cancel')"></button>
