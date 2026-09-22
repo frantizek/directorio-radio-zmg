@@ -1,3 +1,5 @@
+"use strict";
+
 const CONFIG = {
   owner: "TU_USUARIO",
   repo: "directorio_FM_AM",

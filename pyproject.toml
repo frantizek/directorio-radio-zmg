@@ -1,14 +1,10 @@
 [project]
 name = "directorio-fm-am"
 version = "0.1.0"
-description = "Add your description here"
+description = "Directorio de estaciones de radio FM y AM de la Zona Metropolitana de Guadalajara"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "lxml>=4.9",
-    "markdown>=3.5",
-    "pandas>=2.0",
-]
+dependencies = []
 
 [dependency-groups]
 dev = [

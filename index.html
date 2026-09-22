@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Directorio de estaciones de radio FM y AM de Guadalajara (ZMG), Mexico.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Directorio de Radio ZMG</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -78,8 +79,10 @@
               </div>
               <h2 x-text="st.nombre"></h2>
               <div class="card-quick">
-                <template x-for="c in quickContacts(st)" :key="c.tipo">
+                <template x-for="(c, i) in quickContacts(st)" :key="'qc' + i">
                   <a class="icon-link" :href="contactHref(c)"
+                     :target="contactBlank(c) ? '_blank' : null"
+                     :rel="contactBlank(c) ? 'noopener noreferrer' : null"
                      :title="t('contact.' + c.tipo)"
                      :aria-label="t('contact.' + c.tipo)"
                      @click.stop @keydown.stop x-html="contactIcon(c.tipo)"></a>
@@ -114,7 +117,7 @@
             <template x-for="(c, i) in selected.contactos" :key="'c' + i">
               <a class="pill" :href="contactHref(c)"
                  :target="contactBlank(c) ? '_blank' : null"
-                 :rel="contactBlank(c) ? 'noopener' : null">
+                 :rel="contactBlank(c) ? 'noopener noreferrer' : null">
                 <span class="pill-icon" x-html="contactIcon(c.tipo)"></span>
                 <span x-text="t('contact.' + c.tipo)"></span>
                 <span class="pill-value" x-text="contactDisplay(c)"></span>
@@ -149,7 +152,7 @@
                     <template x-for="(c, j) in p.contactos" :key="'pc' + i + '-' + j">
                       <a class="pill" :href="contactHref(c)"
                          :target="contactBlank(c) ? '_blank' : null"
-                         :rel="contactBlank(c) ? 'noopener' : null">
+                         :rel="contactBlank(c) ? 'noopener noreferrer' : null">
                         <span class="pill-icon" x-html="contactIcon(c.tipo)"></span>
                         <span x-text="t('contact.' + c.tipo)"></span>
                         <span class="pill-value" x-text="contactDisplay(c)"></span>
@@ -302,15 +305,15 @@
   </footer>
 
   <!-- Modal login -->
-  <div class="modal-backdrop" x-show="showLogin" x-cloak @click.self="showLogin = false">
+  <div class="modal-backdrop" x-show="showLogin" x-cloak @click.self="showLogin = false" @keydown.window.escape="showLogin = false">
     <div class="modal" role="dialog" aria-modal="true" :aria-label="t('auth.login')">
       <h2 x-text="t('auth.login')"></h2>
       <p class="muted" style="margin: 0;" x-text="t('auth.token_help')"></p>
       <div class="field">
         <label x-text="t('auth.token_label')"></label>
-        <input type="password" x-model="tokenInput" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
+        <input type="password" x-model="tokenInput" x-ref="tokenInput" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
       </div>
-      <p class="error" style="margin: 0;" x-show="loginErrorKey || loginError" x-text="loginErrorKey ? t(loginErrorKey) : loginError"></p>
+      <p class="error" style="margin: 0;" role="alert" x-show="loginErrorKey || loginError" x-text="loginErrorKey ? t(loginErrorKey) : loginError"></p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" @click="showLogin = false" x-text="t('auth.cancel')"></button>
         <button type="button" class="btn btn-primary" :disabled="!tokenInput.trim()" @click="submitLogin()" x-text="t('auth.token_save')"></button>
@@ -322,6 +325,6 @@
   <script src="js/i18n.js"></script>
   <script src="js/github.js"></script>
   <script src="js/app.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <script defer src="js/vendor/alpine.min.js"></script>
 </body>
 </html>

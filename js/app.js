@@ -72,12 +72,15 @@ function contactHref(c) {
       return "https://tunein.com/search/?query=" + encodeURIComponent(v);
     case "iheart":
       return "https://www.iheart.com/search/?q=" + encodeURIComponent(v);
-    case "web":
-      return v;
+    case "web": {
+      var u;
+      try { u = new URL(v.indexOf("//") === 0 ? "https:" + v : v); } catch (e) { return "#"; }
+      return (u.protocol === "https:" || u.protocol === "http:") ? u.href : "#";
+    }
     case "email":
       return "mailto:" + v;
     default:
-      return v;
+      return "#";
   }
 }
 
@@ -104,35 +107,44 @@ function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function normalizeContact(c) {
+  var tipo = CONTACT_TYPES.indexOf(c.tipo) !== -1 ? c.tipo : "whatsapp";
+  var valor = String(c.valor || "").trim().slice(0, 500);
+  if (tipo === "telefono" || tipo === "whatsapp") {
+    var digits = valor.replace(/\D/g, "");
+    if (digits.length === 10) valor = "52" + digits;
+    else if (digits.length === 12 && digits.indexOf("52") === 0) valor = digits;
+    else valor = digits;
+  }
+  if (!valor) return null;
+  var out = { tipo: tipo, valor: valor };
+  if (c.etiqueta) out.etiqueta = String(c.etiqueta).trim().slice(0, 100);
+  if (c.verificado) out.verificado = true;
+  return out;
+}
+
 function normalizeStations(list) {
   return list.map(function (st) {
     var banda = String(st.banda || "FM").toUpperCase();
-    var frecuencia = String(st.frecuencia || "").trim();
-    var contactos = (st.contactos || []).map(function (c) {
-      var out = { tipo: c.tipo || "whatsapp", valor: String(c.valor || "").trim() };
-      if (c.etiqueta) out.etiqueta = String(c.etiqueta).trim();
-      if (c.verificado) out.verificado = true;
-      return out;
-    }).filter(function (c) { return c.valor; });
+    if (banda !== "FM" && banda !== "AM") banda = "FM";
+    var frecuencia = String(st.frecuencia || "").trim().slice(0, 20);
+    var contactos = (st.contactos || []).map(normalizeContact).filter(Boolean);
     var programas = (st.programas || []).map(function (p) {
       return {
-        nombre: String(p.nombre || "").trim(),
-        horario: p.horario ? String(p.horario).trim() : null,
-        dias: (p.dias || []).slice().map(Number).sort(function (a, b) { return a - b; }),
-        locutores: (p.locutores || []).map(function (x) { return String(x).trim(); }).filter(Boolean),
-        contactos: (p.contactos || []).map(function (c) {
-          var out = { tipo: c.tipo || "whatsapp", valor: String(c.valor || "").trim() };
-          if (c.etiqueta) out.etiqueta = String(c.etiqueta).trim();
-          if (c.verificado) out.verificado = true;
-          return out;
-        }).filter(function (c) { return c.valor; })
+        nombre: String(p.nombre || "").trim().slice(0, 200),
+        horario: p.horario ? String(p.horario).trim().slice(0, 200) : null,
+        dias: (p.dias || []).map(Number).filter(function (d) {
+          return Number.isInteger(d) && d >= 1 && d <= 7;
+        }).sort(function (a, b) { return a - b; }),
+        locutores: (p.locutores || []).map(function (x) { return String(x).trim().slice(0, 200); }).filter(Boolean),
+        contactos: (p.contactos || []).map(normalizeContact).filter(Boolean)
       };
     }).filter(function (p) { return p.nombre; });
     return {
       id: (banda + "-" + frecuencia).toLowerCase(),
       banda: banda,
       frecuencia: frecuencia,
-      nombre: String(st.nombre || "").trim(),
+      nombre: String(st.nombre || "").trim().slice(0, 200),
       verificado: !!st.verificado,
       contactos: contactos,
       programas: programas
@@ -184,21 +196,17 @@ document.addEventListener("alpine:init", function () {
       loadData: async function () {
         this.loading = true;
         this.loadFailed = false;
-        var candidates = ["data/estaciones.json", "../data/estaciones.json"];
-        for (var i = 0; i < candidates.length; i++) {
-          try {
-            var res = await fetch(candidates[i], { cache: "no-cache" });
-            if (!res.ok) continue;
-            var data = await res.json();
-            if (data && Array.isArray(data.estaciones)) {
-              this.estaciones = data.estaciones;
-              this.loading = false;
-              return;
-            }
-          } catch (e) {}
+        try {
+          var res = await fetch("data/estaciones.json", { cache: "no-cache" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          var data = await res.json();
+          if (!data || !Array.isArray(data.estaciones)) throw new Error("bad payload");
+          this.estaciones = data.estaciones;
+        } catch (e) {
+          this.loadFailed = true;
+        } finally {
+          this.loading = false;
         }
-        this.loading = false;
-        this.loadFailed = true;
       },
 
       get selected() {
@@ -218,7 +226,11 @@ document.addEventListener("alpine:init", function () {
           })
           .sort(function (a, b) {
             if (a.banda !== b.banda) return a.banda === "FM" ? -1 : 1;
-            return parseFloat(a.frecuencia) - parseFloat(b.frecuencia);
+            var na = parseFloat(a.frecuencia);
+            var nb = parseFloat(b.frecuencia);
+            if (Number.isNaN(na)) return 1;
+            if (Number.isNaN(nb)) return -1;
+            return na - nb;
           });
       },
 
@@ -246,6 +258,10 @@ document.addEventListener("alpine:init", function () {
         this.showLogin = true;
         this.loginError = null;
         this.loginErrorKey = null;
+        var self = this;
+        this.$nextTick(function () {
+          if (self.$refs.tokenInput) self.$refs.tokenInput.focus();
+        });
       },
 
       submitLogin: async function () {
@@ -261,6 +277,7 @@ document.addEventListener("alpine:init", function () {
         } catch (err) {
           this.loginError = err.message;
           this.loginErrorKey = err.i18n || null;
+          this.tokenInput = "";
         }
       },
 
@@ -361,6 +378,11 @@ document.addEventListener("alpine:init", function () {
         try {
           var editingId = this.editing.id;
           var normEditing = normalizeStations([clone(this.editing)])[0] || null;
+          if (!normEditing) {
+            this.saveError = t("error.incomplete");
+            this.saveErrorKey = "error.incomplete";
+            return;
+          }
           var list;
           if (this.deleteMarked && !this.isNew) {
             list = this.estaciones.filter(function (s) { return s.id !== editingId; });
@@ -373,6 +395,12 @@ document.addEventListener("alpine:init", function () {
             }, this);
           }
           list = normalizeStations(list);
+          var duplicates = list.filter(function (s) { return s.id === normEditing.id; }).length > 1;
+          if (duplicates) {
+            this.saveError = t("error.duplicate");
+            this.saveErrorKey = "error.duplicate";
+            return;
+          }
           var prUrl = await github.saveChanges(list);
           this.estaciones = list;
           this.prUrl = prUrl;
@@ -382,8 +410,10 @@ document.addEventListener("alpine:init", function () {
             this.selectedId = null;
             this.view = "list";
           } else {
-            this.selectedId = normEditing ? normEditing.id : null;
-            this.editing = normEditing ? clone(normEditing) : null;
+            this.selectedId = normEditing.id;
+            this.editing = null;
+            this.isNew = false;
+            this.view = "detail";
           }
         } catch (err) {
           this.saveError = err.message;
