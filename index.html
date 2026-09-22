@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Directorio de estaciones de radio FM y AM de Guadalajara (ZMG), Mexico.">
+  <title>Directorio de Radio ZMG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body x-data="radioDirectory">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1 x-text="t('app.title')">Directorio de Radio ZMG</h1>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" @click="toggleLang()" x-text="otherLangLabel()" :aria-label="t('lang.switch')"></button>
+
+        <template x-if="!loggedIn">
+          <button type="button" class="btn" @click="openLogin()" x-text="t('auth.login')"></button>
+        </template>
+
+        <template x-if="loggedIn">
+          <div class="auth-box">
+            <span class="user-chip" x-text="userName || t('auth.signed_in')" :title="t('auth.signed_in')"></span>
+            <button type="button" class="btn btn-ghost" @click="logout()" x-text="t('auth.logout')"></button>
+          </div>
+        </template>
+      </div>
+
+      <div class="toolbar" x-show="!loading && !loadFailed && view === 'list'" x-cloak>
+        <input class="search" type="search" x-model="search" :placeholder="t('search.placeholder')" :aria-label="t('search.placeholder')">
+        <div class="band-filter" role="group" :aria-label="t('filter.all')">
+          <button type="button" :class="{ active: banda === 'ALL' }" @click="banda = 'ALL'" x-text="t('filter.all')"></button>
+          <button type="button" :class="{ active: banda === 'FM' }" @click="banda = 'FM'" x-text="t('filter.fm')"></button>
+          <button type="button" :class="{ active: banda === 'AM' }" @click="banda = 'AM'" x-text="t('filter.am')"></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="pr-banner" x-show="prUrl" x-cloak>
+      <span x-text="t('edit.pr_success')"></span>
+      <a :href="prUrl" target="_blank" rel="noopener" x-text="t('edit.open_pr')"></a>
+      <button type="button" class="btn btn-ghost btn-small" @click="prUrl = null" :aria-label="t('common.close')" x-text="t('common.close')"></button>
+    </div>
+
+    <div class="state" x-show="loading" x-cloak>
+      <p x-text="t('state.loading')"></p>
+    </div>
+
+    <div class="state" x-show="!loading && loadFailed" x-cloak>
+      <p x-text="t('error.load')"></p>
+      <button type="button" class="btn" @click="loadData()" x-text="t('error.retry')"></button>
+    </div>
+
+    <!-- Vista lista -->
+    <template x-if="!loading && !loadFailed && view === 'list'">
+      <div>
+        <div class="list-actions" style="padding-top: 16px;">
+          <button type="button" class="btn btn-primary" x-show="loggedIn" @click="startNew()" x-text="t('list.new')"></button>
+        </div>
+
+        <p class="state" x-show="filtered.length === 0" x-text="t('list.empty')"></p>
+
+        <div class="grid">
+          <template x-for="st in filtered" :key="st.id">
+            <article class="card" role="button" tabindex="0"
+                     @click="openDetail(st)"
+                     @keydown.enter.prevent="openDetail(st)">
+              <div class="card-top">
+                <span class="freq-badge" x-text="st.frecuencia + ' ' + st.banda"></span>
+                <span class="verified" x-show="st.verificado" x-text="t('badge.verified')"></span>
+              </div>
+              <h2 x-text="st.nombre"></h2>
+              <div class="card-quick">
+                <template x-for="c in quickContacts(st)" :key="c.tipo">
+                  <a class="icon-link" :href="contactHref(c)"
+                     :title="t('contact.' + c.tipo)"
+                     :aria-label="t('contact.' + c.tipo)"
+                     @click.stop @keydown.stop x-html="contactIcon(c.tipo)"></a>
+                </template>
+              </div>
+            </article>
+          </template>
+        </div>
+      </div>
+    </template>
+
+    <!-- Vista detalle -->
+    <template x-if="!loading && !loadFailed && view === 'detail' && selected">
+      <div class="detail">
+        <div class="detail-top">
+          <button type="button" class="btn btn-ghost" @click="backToList()" x-text="t('detail.back')"></button>
+          <button type="button" class="btn" x-show="loggedIn" @click="startEdit(selected)" x-text="t('detail.edit')"></button>
+        </div>
+
+        <div class="detail-head">
+          <span class="freq-badge freq-badge-lg" x-text="selected.frecuencia + ' ' + selected.banda"></span>
+          <h2 x-text="selected.nombre"></h2>
+          <span class="verified" x-show="selected.verificado">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span x-text="t('badge.verified')"></span>
+          </span>
+        </div>
+
+        <section class="block">
+          <h3 x-text="t('detail.contacts')"></h3>
+          <div class="pills">
+            <template x-for="(c, i) in selected.contactos" :key="'c' + i">
+              <a class="pill" :href="contactHref(c)"
+                 :target="contactBlank(c) ? '_blank' : null"
+                 :rel="contactBlank(c) ? 'noopener' : null">
+                <span class="pill-icon" x-html="contactIcon(c.tipo)"></span>
+                <span x-text="t('contact.' + c.tipo)"></span>
+                <span class="pill-value" x-text="contactDisplay(c)"></span>
+                <span class="pill-tag" x-show="c.etiqueta" x-text="c.etiqueta"></span>
+              </a>
+            </template>
+          </div>
+          <p class="muted" x-show="!selected.contactos.length" x-text="t('detail.no_contacts')"></p>
+        </section>
+
+        <section class="block">
+          <h3 x-text="t('detail.programs')"></h3>
+          <div class="programs">
+            <template x-for="(p, i) in selected.programas" :key="'p' + i">
+              <article class="program">
+                <div class="program-head">
+                  <div class="program-info">
+                    <h4 x-text="p.nombre"></h4>
+                    <p class="meta">
+                      <span x-text="p.horario || t('program.tbd')"></span>
+                      <span x-show="p.dias && p.dias.length" x-text="formatDays(p.dias)"></span>
+                    </p>
+                    <p class="meta" x-show="p.locutores && p.locutores.length" x-text="t('program.hosts') + ': ' + p.locutores.join(', ')"></p>
+                  </div>
+                  <button type="button" class="btn btn-small"
+                          x-show="p.contactos && p.contactos.length"
+                          @click="toggleProgramContacts(i)"
+                          x-text="openPrograms[i] ? t('program.hide_contacts') : t('program.show_contacts')"></button>
+                </div>
+                <div class="program-contacts" x-show="openPrograms[i]" x-cloak>
+                  <div class="pills">
+                    <template x-for="(c, j) in p.contactos" :key="'pc' + i + '-' + j">
+                      <a class="pill" :href="contactHref(c)"
+                         :target="contactBlank(c) ? '_blank' : null"
+                         :rel="contactBlank(c) ? 'noopener' : null">
+                        <span class="pill-icon" x-html="contactIcon(c.tipo)"></span>
+                        <span x-text="t('contact.' + c.tipo)"></span>
+                        <span class="pill-value" x-text="contactDisplay(c)"></span>
+                        <span class="pill-tag" x-show="c.etiqueta" x-text="c.etiqueta"></span>
+                      </a>
+                    </template>
+                  </div>
+                </div>
+              </article>
+            </template>
+          </div>
+          <p class="muted" x-show="!selected.programas.length" x-text="t('detail.no_programs')"></p>
+        </section>
+      </div>
+    </template>
+
+    <!-- Vista edicion -->
+    <template x-if="!loading && !loadFailed && view === 'edit' && editing">
+      <form class="edit-form" @submit.prevent="save()">
+
+        <p class="error" x-show="saveErrorKey || saveError" x-text="saveErrorKey ? t(saveErrorKey) : saveError"></p>
+
+        <div class="form-head">
+          <button type="button" class="btn btn-ghost" @click="cancelEdit()" x-text="t('edit.cancel')"></button>
+          <h2 x-text="isNew ? t('edit.title_new') : t('edit.title_edit')"></h2>
+        </div>
+
+        <fieldset>
+          <legend x-text="t('edit.section_station')"></legend>
+          <div class="row">
+            <div class="field">
+              <label x-text="t('edit.band')"></label>
+              <select x-model="editing.banda">
+                <option value="FM">FM</option>
+                <option value="AM">AM</option>
+              </select>
+            </div>
+            <div class="field">
+              <label x-text="t('edit.frequency')"></label>
+              <input type="text" x-model="editing.frecuencia" required pattern="[0-9]+(\.[0-9]+)?">
+            </div>
+          </div>
+          <div class="field">
+            <label x-text="t('edit.name')"></label>
+            <input type="text" x-model="editing.nombre" required>
+          </div>
+          <label class="check">
+            <input type="checkbox" x-model="editing.verificado">
+            <span x-text="t('edit.verified')"></span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend x-text="t('edit.contacts')"></legend>
+          <template x-for="(c, i) in editing.contactos" :key="'ec' + i">
+            <div class="row">
+              <select x-model="c.tipo" :aria-label="t('edit.contact_type')">
+                <template x-for="tp in CONTACT_TYPES" :key="tp">
+                  <option :value="tp" x-text="t('contact.' + tp)"></option>
+                </template>
+              </select>
+              <input type="text" x-model="c.valor" :placeholder="t('edit.contact_value')">
+              <input type="text" x-model="c.etiqueta" :placeholder="t('edit.contact_label')">
+              <button type="button" class="btn btn-danger btn-small row-remove" @click="editing.contactos.splice(i, 1)" x-text="t('edit.remove')"></button>
+            </div>
+          </template>
+          <div>
+            <button type="button" class="btn btn-small" @click="addContact()" x-text="t('edit.add_contact')"></button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend x-text="t('edit.programs')"></legend>
+          <template x-for="(p, i) in editing.programas" :key="'ep' + i">
+            <div class="sub-card">
+              <div class="sub-card-head">
+                <input type="text" class="program-name" x-model="p.nombre" :placeholder="t('edit.program_name')">
+                <button type="button" class="btn btn-danger btn-small row-remove" @click="editing.programas.splice(i, 1)" x-text="t('edit.remove')"></button>
+              </div>
+              <div class="field">
+                <label x-text="t('edit.program_schedule')"></label>
+                <input type="text" x-model="p.horario" :placeholder="t('edit.program_schedule')">
+              </div>
+              <div>
+                <label class="days-label" x-text="t('program.days')"></label>
+                <div class="days">
+                  <template x-for="d in [1,2,3,4,5,6,7]" :key="d">
+                    <label class="check">
+                      <input type="checkbox" :value="d" x-model="p.dias">
+                      <span x-text="t('day.' + d)"></span>
+                    </label>
+                  </template>
+                </div>
+              </div>
+              <div>
+                <label class="days-label" x-text="t('program.hosts')"></label>
+                <div class="hosts">
+                  <template x-for="(h, hi) in p.locutores" :key="'h' + i + '-' + hi">
+                    <div class="row">
+                      <input type="text" x-model="p.locutores[hi]" :placeholder="t('program.hosts')">
+                      <button type="button" class="btn btn-danger btn-small" @click="p.locutores.splice(hi, 1)" x-text="t('edit.remove')"></button>
+                    </div>
+                  </template>
+                </div>
+                <button type="button" class="btn btn-small" @click="addHost(p)" x-text="t('edit.add_host')"></button>
+              </div>
+              <div>
+                <label class="days-label" x-text="t('edit.contacts')"></label>
+                <template x-for="(c, ci) in p.contactos" :key="'pc' + i + '-' + ci">
+                  <div class="row">
+                    <select x-model="c.tipo" :aria-label="t('edit.contact_type')">
+                      <template x-for="tp in CONTACT_TYPES" :key="tp">
+                        <option :value="tp" x-text="t('contact.' + tp)"></option>
+                      </template>
+                    </select>
+                    <input type="text" x-model="c.valor" :placeholder="t('edit.contact_value')">
+                    <input type="text" x-model="c.etiqueta" :placeholder="t('edit.contact_label')">
+                    <button type="button" class="btn btn-danger btn-small" @click="p.contactos.splice(ci, 1)" x-text="t('edit.remove')"></button>
+                  </div>
+                </template>
+                <div style="margin-top: 8px;">
+                  <button type="button" class="btn btn-small" @click="addProgramContact(p)" x-text="t('edit.add_contact')"></button>
+                </div>
+              </div>
+            </div>
+          </template>
+          <div>
+            <button type="button" class="btn btn-small" @click="addProgram()" x-text="t('edit.add_program')"></button>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" :disabled="saving" x-text="saving ? t('edit.saving') : t('edit.save')"></button>
+          <template x-if="!isNew">
+            <button type="button" class="btn btn-danger" @click="toggleDeleteMark()"
+                    x-text="deleteMarked ? t('edit.delete_undo') : t('edit.delete')"></button>
+          </template>
+        </div>
+
+        <p class="warn" x-show="deleteMarked" x-text="t('edit.delete_marked')"></p>
+      </form>
+    </template>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted" x-text="t('footer.note')"></p>
+    </div>
+  </footer>
+
+  <!-- Modal login -->
+  <div class="modal-backdrop" x-show="showLogin" x-cloak @click.self="showLogin = false">
+    <div class="modal" role="dialog" aria-modal="true" :aria-label="t('auth.login')">
+      <h2 x-text="t('auth.login')"></h2>
+      <p class="muted" style="margin: 0;" x-text="t('auth.token_help')"></p>
+      <div class="field">
+        <label x-text="t('auth.token_label')"></label>
+        <input type="password" x-model="tokenInput" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
+      </div>
+      <p class="error" style="margin: 0;" x-show="loginErrorKey || loginError" x-text="loginErrorKey ? t(loginErrorKey) : loginError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" @click="showLogin = false" x-text="t('auth.cancel')"></button>
+        <button type="button" class="btn btn-primary" :disabled="!tokenInput.trim()" @click="submitLogin()" x-text="t('auth.token_save')"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/github.js"></script>
+  <script src="js/app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+</body>
+</html>

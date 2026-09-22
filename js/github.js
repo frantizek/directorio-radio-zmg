@@ -1,0 +1,148 @@
+"use strict";
+
+var github = {
+  tokenKey: "github_token",
+  userKey: "github_user",
+
+  getToken: function () {
+    try { return localStorage.getItem(this.tokenKey) || ""; } catch (e) { return ""; }
+  },
+
+  setToken: function (token) {
+    try { localStorage.setItem(this.tokenKey, token); } catch (e) {}
+  },
+
+  clearToken: function () {
+    try { localStorage.removeItem(this.tokenKey); } catch (e) {}
+  },
+
+  isLoggedIn: function () {
+    return !!this.getToken();
+  },
+
+  api: async function (path, options) {
+    if (options && options.body) {
+      options = Object.assign({}, options);
+      options.headers = Object.assign({}, options.headers, { "Content-Type": "application/json" });
+    }
+    var res = await fetch("https://api.github.com" + path, Object.assign({}, options, {
+      headers: Object.assign({}, options.headers, {
+        Authorization: "Bearer " + this.getToken(),
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+      })
+    }));
+    if (!res.ok) {
+      var apiMessage = "";
+      try {
+        var data = await res.json();
+        apiMessage = data.message || "";
+      } catch (e) {}
+      throw this.errorFrom(res.status, apiMessage);
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  },
+
+  errorFrom: function (status, apiMessage) {
+    var key = null;
+    if (status === 401) key = "error.401";
+    else if (status === 403) key = "error.403";
+    else if (status === 404) key = "error.404";
+    var err = new Error(key ? t(key) : (apiMessage || t("error.generic")));
+    if (key) err.i18n = key;
+    err.status = status;
+    return err;
+  },
+
+  simpleError: function (key) {
+    var err = new Error(t(key));
+    err.i18n = key;
+    return err;
+  },
+
+  login: async function (token) {
+    var clean = String(token || "").trim();
+    var res = await fetch("https://api.github.com/user", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + clean,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+      }
+    });
+    if (!res.ok) {
+      var apiMessage = "";
+      try {
+        var data = await res.json();
+        apiMessage = data.message || "";
+      } catch (e) {}
+      throw this.errorFrom(res.status, apiMessage);
+    }
+    var user = await res.json();
+    this.setToken(clean);
+    return user;
+  },
+
+  saveChanges: async function (estaciones) {
+    if (!this.getToken()) throw this.simpleError("auth.login_required");
+    if (!CONFIG.owner || CONFIG.owner === "TU_USUARIO") throw this.simpleError("error.config");
+
+    var owner = CONFIG.owner;
+    var repo = CONFIG.repo;
+    var path = CONFIG.dataPath;
+
+    var repoInfo = await this.api("/repos/" + owner + "/" + repo);
+    var baseBranch = repoInfo.default_branch;
+
+    var refInfo = await this.api("/repos/" + owner + "/" + repo + "/git/ref/heads/" + encodeURIComponent(baseBranch));
+    var baseSha = refInfo.object.sha;
+
+    var branch = "edit/directorio-" + Date.now();
+    await this.api("/repos/" + owner + "/" + repo + "/git/refs", {
+      method: "POST",
+      body: JSON.stringify({ ref: "refs/heads/" + branch, sha: baseSha })
+    });
+
+    var fileSha;
+    try {
+      var file = await this.api("/repos/" + owner + "/" + repo + "/contents/" + path + "?ref=" + encodeURIComponent(branch));
+      fileSha = file.sha;
+    } catch (e) {
+      if (e.status !== 404) throw e;
+    }
+
+    var content = toBase64(JSON.stringify({ estaciones: estaciones }, null, 2) + "\n");
+    var putBody = {
+      message: "Actualizar directorio de estaciones desde el frontend",
+      content: content,
+      branch: branch
+    };
+    if (fileSha) putBody.sha = fileSha;
+    await this.api("/repos/" + owner + "/" + repo + "/contents/" + path, {
+      method: "PUT",
+      body: JSON.stringify(putBody)
+    });
+
+    var pr = await this.api("/repos/" + owner + "/" + repo + "/pulls", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "Actualizar directorio de estaciones",
+        head: branch,
+        base: baseBranch,
+        body: "Cambios generados desde la interfaz web del directorio de radio."
+      })
+    });
+
+    return pr.html_url;
+  }
+};
+
+function toBase64(str) {
+  var bytes = new TextEncoder().encode(str);
+  var binary = "";
+  for (var i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
