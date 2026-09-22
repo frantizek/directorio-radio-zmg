@@ -1,0 +1,335 @@
+{
+    "estaciones_fm": [
+        {
+            "frecuencia": "88.7 MHz",
+            "nombre_de_la_estación_y_programas": "ArrobaFM",
+            "teléfono_fijo": "3338250887",
+            "número_de_whatsapp": "No disponible",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "89.1 MHz",
+            "nombre_de_la_estación_y_programas": "RMX",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "89.9 MHz",
+            "nombre_de_la_estación_y_programas": "Magia Digital",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1972 7663",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "90.3 MHz",
+            "nombre_de_la_estación_y_programas": "Match FM",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1188 5013",
+            "verificado": null
+        },
+        {
+            "frecuencia": "90.7 MHz",
+            "nombre_de_la_estación_y_programas": "Señal 90",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3813 1313",
+            "verificado": null
+        },
+        {
+            "frecuencia": "91.5 MHz",
+            "nombre_de_la_estación_y_programas": "Zona Tres",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1880 7641",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "91.9 MHz",
+            "nombre_de_la_estación_y_programas": "Rock & Soul",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1409 9399",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "92.3 MHz",
+            "nombre_de_la_estación_y_programas": "Fiesta Mexicana",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3121 9230",
+            "verificado": null
+        },
+        {
+            "frecuencia": "92.7 MHz",
+            "nombre_de_la_estación_y_programas": "Radio Mujer",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "93.1 MHz",
+            "nombre_de_la_estación_y_programas": "Amor 93.1",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1019 7931",
+            "verificado": null
+        },
+        {
+            "frecuencia": "93.9 MHz",
+            "nombre_de_la_estación_y_programas": "Imagen Radio Guadalajara",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "55 1951 6846",
+            "verificado": null
+        },
+        {
+            "frecuencia": "94.7 MHz",
+            "nombre_de_la_estación_y_programas": "KY 94.7",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 2823 3699",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "95.5 MHz",
+            "nombre_de_la_estación_y_programas": "La Mejor",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1974 7955",
+            "verificado": null
+        },
+        {
+            "frecuencia": "95.9 MHz",
+            "nombre_de_la_estación_y_programas": "Vox Radio Hits",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1974 7955",
+            "verificado": null
+        },
+        {
+            "frecuencia": "96.3 MHz",
+            "nombre_de_la_estación_y_programas": "Jalisco Radio",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "97.1 MHz",
+            "nombre_de_la_estación_y_programas": "La Ke Buena",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3812 0971",
+            "verificado": null
+        },
+        {
+            "frecuencia": "97.9 MHz",
+            "nombre_de_la_estación_y_programas": "Fórmula Melódica",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3812 0971",
+            "verificado": null
+        },
+        {
+            "frecuencia": "98.7 MHz",
+            "nombre_de_la_estación_y_programas": "Globo",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "99.5 MHz",
+            "nombre_de_la_estación_y_programas": "Romance",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1409 9408",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "99.9 MHz",
+            "nombre_de_la_estación_y_programas": "Exa FM",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1019 7999",
+            "verificado": null
+        },
+        {
+            "frecuencia": "100.3 MHz",
+            "nombre_de_la_estación_y_programas": "Heraldo Radio",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3122 1190",
+            "verificado": null
+        },
+        {
+            "frecuencia": "101.1 MHz",
+            "nombre_de_la_estación_y_programas": "Exa FM 101.1",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3813 1313",
+            "verificado": null
+        },
+        {
+            "frecuencia": "101.9 MHz",
+            "nombre_de_la_estación_y_programas": "La Buena Onda",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3813 1313",
+            "verificado": null
+        },
+        {
+            "frecuencia": "102.7 MHz",
+            "nombre_de_la_estación_y_programas": "Los 40",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3647 1027",
+            "verificado": null
+        },
+        {
+            "frecuencia": "103.5 MHz",
+            "nombre_de_la_estación_y_programas": "La Tapatia",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3647 1027",
+            "verificado": null
+        },
+        {
+            "frecuencia": "104.3 MHz",
+            "nombre_de_la_estación_y_programas": "Radio UdeG ▸ El Expreso de las Diez",
+            "teléfono_fijo": "33 1716 0006",
+            "número_de_whatsapp": "General: 33 2053 6975 ✅ Programa: 33 2030 3232 ✅",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "105.1 MHz",
+            "nombre_de_la_estación_y_programas": "Milenio Bella Musica",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "105.9 MHz",
+            "nombre_de_la_estación_y_programas": "Éxtasis Digital",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1404 0979",
+            "verificado": null
+        },
+        {
+            "frecuencia": "106.7 MHz",
+            "nombre_de_la_estación_y_programas": "Máxima FM",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1199 0735",
+            "verificado": null
+        },
+        {
+            "frecuencia": "107.5 MHz",
+            "nombre_de_la_estación_y_programas": "Retro 107.5",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3467 7220",
+            "verificado": "✅"
+        }
+    ],
+    "estaciones_am": [
+        {
+            "frecuencia": "580 kHz",
+            "nombre_de_la_estación": "Radio 580",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3122 1190",
+            "verificado": null
+        },
+        {
+            "frecuencia": "630 kHz",
+            "nombre_de_la_estación": "Jalisco Radio",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3678 0094",
+            "verificado": null
+        },
+        {
+            "frecuencia": "710 kHz",
+            "nombre_de_la_estación": "Radio María",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 2301 2294",
+            "verificado": null
+        },
+        {
+            "frecuencia": "760 kHz",
+            "nombre_de_la_estación": "Radio Cañón",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "790 kHz",
+            "nombre_de_la_estación": "W Radio",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "55 1381 2222",
+            "verificado": null
+        },
+        {
+            "frecuencia": "850 kHz",
+            "nombre_de_la_estación": "Notisistema",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1880 8692",
+            "verificado": null
+        },
+        {
+            "frecuencia": "920 kHz",
+            "nombre_de_la_estación": "La Voz de la FE",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1010 kHz",
+            "nombre_de_la_estación": "Radio Ranchito",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3812 3790",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1070 kHz",
+            "nombre_de_la_estación": "Radio Vital",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3813 1313",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1110 kHz",
+            "nombre_de_la_estación": "Radio Comerciales",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1150 kHz",
+            "nombre_de_la_estación": "Radio Metrópoli",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 1155 1962",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "1190 kHz",
+            "nombre_de_la_estación": "W Radio Guadalajara",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "No disponible",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1250 kHz",
+            "nombre_de_la_estación": "DK 1250",
+            "teléfono_fijo": "33 3647 7481",
+            "número_de_whatsapp": "33 2944 9080",
+            "verificado": "✅"
+        },
+        {
+            "frecuencia": "1310 kHz",
+            "nombre_de_la_estación": "Radio Vital",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3813 1313",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1340 kHz",
+            "nombre_de_la_estación": "Frecuencia Deportiva",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3122 5933",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1410 kHz",
+            "nombre_de_la_estación": "Campirana",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3812 2510",
+            "verificado": null
+        },
+        {
+            "frecuencia": "1480 kHz",
+            "nombre_de_la_estación": "Ondas de la Alegría",
+            "teléfono_fijo": null,
+            "número_de_whatsapp": "33 3678 0094",
+            "verificado": null
+        }
+    ]
+}
