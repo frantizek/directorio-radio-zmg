@@ -1,7 +1,5 @@
 "use strict";
 
-var CONTACT_TYPES = ["telefono", "whatsapp", "telegram", "instagram", "facebook", "x", "threads", "tiktok", "youtube", "tunein", "iheart", "web", "email"];
-
 var ICON_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
 
 var ICON_PATHS = {
@@ -103,55 +101,6 @@ function formatDays(dias) {
   return sorted.map(function (d) { return t("day." + d); }).join(", ");
 }
 
-function clone(value) {
-  return JSON.parse(JSON.stringify(value));
-}
-
-function normalizeContact(c) {
-  var tipo = CONTACT_TYPES.indexOf(c.tipo) !== -1 ? c.tipo : "whatsapp";
-  var valor = String(c.valor || "").trim().slice(0, 500);
-  if (tipo === "telefono" || tipo === "whatsapp") {
-    var digits = valor.replace(/\D/g, "");
-    if (digits.length === 10) valor = "52" + digits;
-    else if (digits.length === 12 && digits.indexOf("52") === 0) valor = digits;
-    else valor = digits;
-  }
-  if (!valor) return null;
-  var out = { tipo: tipo, valor: valor };
-  if (c.etiqueta) out.etiqueta = String(c.etiqueta).trim().slice(0, 100);
-  if (c.verificado) out.verificado = true;
-  return out;
-}
-
-function normalizeStations(list) {
-  return list.map(function (st) {
-    var banda = String(st.banda || "FM").toUpperCase();
-    if (banda !== "FM" && banda !== "AM") banda = "FM";
-    var frecuencia = String(st.frecuencia || "").trim().slice(0, 20);
-    var contactos = (st.contactos || []).map(normalizeContact).filter(Boolean);
-    var programas = (st.programas || []).map(function (p) {
-      return {
-        nombre: String(p.nombre || "").trim().slice(0, 200),
-        horario: p.horario ? String(p.horario).trim().slice(0, 200) : null,
-        dias: (p.dias || []).map(Number).filter(function (d) {
-          return Number.isInteger(d) && d >= 1 && d <= 7;
-        }).sort(function (a, b) { return a - b; }),
-        locutores: (p.locutores || []).map(function (x) { return String(x).trim().slice(0, 200); }).filter(Boolean),
-        contactos: (p.contactos || []).map(normalizeContact).filter(Boolean)
-      };
-    }).filter(function (p) { return p.nombre; });
-    return {
-      id: (banda + "-" + frecuencia).toLowerCase(),
-      banda: banda,
-      frecuencia: frecuencia,
-      nombre: String(st.nombre || "").trim().slice(0, 200),
-      verificado: !!st.verificado,
-      contactos: contactos,
-      programas: programas
-    };
-  }).filter(function (st) { return st.nombre && st.frecuencia; });
-}
-
 document.addEventListener("alpine:init", function () {
   Alpine.store("i18n", {
     lang: detectLang(),
@@ -173,24 +122,8 @@ document.addEventListener("alpine:init", function () {
       view: "list",
       selectedId: null,
       openPrograms: {},
-      editing: null,
-      isNew: false,
-      deleteMarked: false,
-      showLogin: false,
-      tokenInput: "",
-      loginError: null,
-      loginErrorKey: null,
-      loggedIn: false,
-      userName: "",
-      saving: false,
-      saveError: null,
-      saveErrorKey: null,
-      prUrl: null,
-      savedDirect: false,
 
       init: function () {
-        this.loggedIn = github.isLoggedIn();
-        try { this.userName = localStorage.getItem(github.userKey) || ""; } catch (e) {}
         this.loadData();
       },
 
@@ -244,191 +177,12 @@ document.addEventListener("alpine:init", function () {
 
       backToList: function () {
         this.view = "list";
-        this.editing = null;
-        this.deleteMarked = false;
-        this.saveError = null;
-        this.saveErrorKey = null;
-        this.prUrl = null;
-        this.savedDirect = false;
+        this.openPrograms = {};
         window.scrollTo(0, 0);
       },
 
       toggleProgramContacts: function (i) {
         this.openPrograms[i] = !this.openPrograms[i];
-      },
-
-      openLogin: function () {
-        this.showLogin = true;
-        this.loginError = null;
-        this.loginErrorKey = null;
-        var self = this;
-        this.$nextTick(function () {
-          if (self.$refs.tokenInput) self.$refs.tokenInput.focus();
-        });
-      },
-
-      submitLogin: async function () {
-        this.loginError = null;
-        this.loginErrorKey = null;
-        try {
-          var user = await github.login(this.tokenInput);
-          this.loggedIn = true;
-          this.userName = user.login || "";
-          try { localStorage.setItem(github.userKey, this.userName); } catch (e) {}
-          this.tokenInput = "";
-          this.showLogin = false;
-        } catch (err) {
-          this.loginError = err.message;
-          this.loginErrorKey = err.i18n || null;
-          this.tokenInput = "";
-        }
-      },
-
-      logout: function () {
-        github.clearToken();
-        try { localStorage.removeItem(github.userKey); } catch (e) {}
-        this.loggedIn = false;
-        this.userName = "";
-        if (this.view === "edit") {
-          var self = this;
-          var stillHere = this.selectedId && this.estaciones.find(function (s) { return s.id === self.selectedId; });
-          this.editing = null;
-          this.deleteMarked = false;
-          this.view = stillHere ? "detail" : "list";
-        }
-      },
-
-      prepForEdit: function (st) {
-        var s = clone(st);
-        s.contactos = s.contactos || [];
-        s.programas = (s.programas || []).map(function (p) {
-          return {
-            nombre: p.nombre || "",
-            horario: p.horario == null ? null : p.horario,
-            dias: p.dias || [],
-            locutores: p.locutores || [],
-            contactos: p.contactos || []
-          };
-        });
-        return s;
-      },
-
-      startEdit: function (st) {
-        if (!this.loggedIn) return;
-        this.editing = this.prepForEdit(st);
-        this.selectedId = st.id;
-        this.isNew = false;
-        this.deleteMarked = false;
-        this.saveError = null;
-        this.saveErrorKey = null;
-        this.prUrl = null;
-        this.savedDirect = false;
-        this.view = "edit";
-        window.scrollTo(0, 0);
-      },
-
-      startNew: function () {
-        if (!this.loggedIn) return;
-        this.editing = this.prepForEdit({ banda: "FM", frecuencia: "", nombre: "", verificado: false, contactos: [], programas: [] });
-        this.isNew = true;
-        this.deleteMarked = false;
-        this.saveError = null;
-        this.saveErrorKey = null;
-        this.prUrl = null;
-        this.savedDirect = false;
-        this.view = "edit";
-        window.scrollTo(0, 0);
-      },
-
-      cancelEdit: function () {
-        var st = this.estaciones.find(function (s) {
-          return s.id === this.selectedId;
-        }.bind(this));
-        this.editing = null;
-        this.deleteMarked = false;
-        this.prUrl = null;
-        this.savedDirect = false;
-        this.view = (!this.isNew && st) ? "detail" : "list";
-        window.scrollTo(0, 0);
-      },
-
-      addContact: function () {
-        this.editing.contactos.push({ tipo: "whatsapp", valor: "", etiqueta: "" });
-      },
-
-      addProgram: function () {
-        this.editing.programas.push({ nombre: "", horario: null, dias: [], locutores: [], contactos: [] });
-      },
-
-      addHost: function (p) {
-        p.locutores.push("");
-      },
-
-      addProgramContact: function (p) {
-        p.contactos.push({ tipo: "whatsapp", valor: "", etiqueta: "" });
-      },
-
-      toggleDeleteMark: function () {
-        this.deleteMarked = !this.deleteMarked;
-      },
-
-      save: async function () {
-        if (this.saving) return;
-        if (!github.isLoggedIn()) {
-          this.saveError = t("auth.login_required");
-          this.saveErrorKey = "auth.login_required";
-          return;
-        }
-        this.saving = true;
-        this.saveError = null;
-        this.saveErrorKey = null;
-        try {
-          var editingId = this.editing.id;
-          var normEditing = normalizeStations([clone(this.editing)])[0] || null;
-          if (!normEditing) {
-            this.saveError = t("error.incomplete");
-            this.saveErrorKey = "error.incomplete";
-            return;
-          }
-          var list;
-          if (this.deleteMarked && !this.isNew) {
-            list = this.estaciones.filter(function (s) { return s.id !== editingId; });
-          } else if (this.isNew) {
-            list = this.estaciones.slice();
-            list.push(this.editing);
-          } else {
-            list = this.estaciones.map(function (s) {
-              return s.id === editingId ? clone(this.editing) : s;
-            }, this);
-          }
-          list = normalizeStations(list);
-          var duplicates = list.filter(function (s) { return s.id === normEditing.id; }).length > 1;
-          if (duplicates) {
-            this.saveError = t("error.duplicate");
-            this.saveErrorKey = "error.duplicate";
-            return;
-          }
-          var prUrl = await github.saveChanges(list);
-          this.estaciones = list;
-          this.prUrl = prUrl;
-          this.savedDirect = !prUrl;
-          if (this.deleteMarked && !this.isNew) {
-            this.editing = null;
-            this.deleteMarked = false;
-            this.selectedId = null;
-            this.view = "list";
-          } else {
-            this.selectedId = normEditing.id;
-            this.editing = null;
-            this.isNew = false;
-            this.view = "detail";
-          }
-        } catch (err) {
-          this.saveError = err.message;
-          this.saveErrorKey = err.i18n || null;
-        } finally {
-          this.saving = false;
-        }
       }
     };
   });

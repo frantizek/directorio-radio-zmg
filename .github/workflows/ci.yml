@@ -23,7 +23,7 @@ jobs:
         run: uv run ruff check .
 
       - name: Sintaxis del frontend
-        run: node --check js/config.js && node --check js/i18n.js && node --check js/github.js && node --check js/app.js
+        run: node --check js/i18n.js && node --check js/app.js && node --check admin/admin.js
 
       - name: README sincronizado con el JSON
         run: |

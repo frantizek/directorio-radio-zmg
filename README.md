@@ -6,27 +6,33 @@ Directorio web de las principales estaciones de radio FM y AM de la Zona Metropo
 
 El directorio está publicado en GitHub Pages: **https://frantizek.github.io/directorio-radio-zmg/**
 
+La página pública es de **solo lectura**: no hay login ni botones de edición. Las correcciones se hacen localmente con el panel de administración (ver abajo).
+
 Para desplegarlo en otro repositorio:
 
 1. Crea un repositorio en GitHub y sube este código.
 2. En **Settings → Pages → Source**, selecciona *Deploy from a branch* → `main` → `/` (root).
-3. Edita `js/config.js` y pon tu usuario de GitHub en `CONFIG.owner`.
-4. Crea un *fine-grained personal access token* con permisos **Contents: read/write** y **Pull requests: read/write** sobre el repositorio.
-5. En la web, usa el botón **Iniciar sesión** para pegar el token.
 
 ## Cómo editar los datos
 
 - La **fuente de verdad** es `data/estaciones.json`.
-- Desde la web (con sesión iniciada) puedes añadir, editar o eliminar estaciones, contactos y programas.
-  - Si tu token tiene **permisos de escritura** sobre el repositorio (p. ej. el dueño), los cambios se guardan **directamente en `main`**.
-  - Si no tiene permisos de escritura, la aplicación crea una rama, commitea el JSON y abre un **pull request** para revisar los cambios.
-- También puedes editar el JSON directamente y regenerar el README con el script.
+- Para hacer correcciones, levanta el **panel de administración local**:
+
+  ```bash
+  uv run python scripts/admin_server.py
+  ```
+
+  Se abre en **http://127.0.0.1:8001** (solo accesible desde tu máquina). Ahí puedes añadir, editar o eliminar estaciones, contactos y programas. Cada guardado normaliza los datos, escribe `data/estaciones.json` y regenera el README automáticamente.
+- Después de editar, sube los cambios al repositorio con `git add` + `git commit` + `git push`.
 - Un workflow de **GitHub Actions** (`.github/workflows/ci.yml`) valida los datos en cada push/PR: tests, linter, sintaxis del frontend y que el README esté sincronizado con el JSON.
 
 ## Estructura del proyecto
 
 - `data/estaciones.json` — datos estructurados (estaciones, contactos, programas).
-- `index.html`, `css/`, `js/` — frontend estático (Alpine.js, i18n es/en, cliente de la API de GitHub).
+- `index.html`, `css/`, `js/` — frontend estático de solo lectura (Alpine.js, i18n es/en).
+- `admin/` — panel de administración local (HTML/JS/CSS servidos por `admin_server.py`).
+- `scripts/estaciones.py` — normalización y persistencia de los datos.
+- `scripts/admin_server.py` — servidor HTTP local con API CRUD y panel de admin.
 - `scripts/migrate.py` — migración única de las tablas del README al JSON.
 - `scripts/generate_readme.py` — regenera las tablas del README desde el JSON.
 - `tests/` — pruebas de pytest.
@@ -34,6 +40,7 @@ Para desplegarlo en otro repositorio:
 ## Desarrollo
 
 ```bash
+uv run python scripts/admin_server.py   # panel de admin local (http://127.0.0.1:8001)
 uv run python scripts/migrate.py        # README -> data/estaciones.json
 uv run python scripts/generate_readme.py # data/estaciones.json -> README
 uv run pytest                            # ejecutar tests

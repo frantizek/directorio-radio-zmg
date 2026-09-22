@@ -1,0 +1,71 @@
+/* ---------- Admin ---------- */
+
+.flash {
+  margin: 16px 0;
+  padding: 12px 14px;
+  background: var(--ok-soft);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  color: var(--ok);
+}
+
+#error {
+  margin: 16px 0;
+  padding: 12px 14px;
+  background: var(--danger-soft);
+  border: 1px solid #f3c2c2;
+  border-radius: var(--radius);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 32px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: var(--bg);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+.col-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-table .col-actions button {
+  margin-left: 4px;
+}
+
+#count {
+  margin: 12px 0;
+  font-size: 0.85rem;
+}

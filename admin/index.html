@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — Directorio de Radio ZMG</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Admin — Directorio de Radio ZMG</h1>
+      </div>
+      <div class="header-actions">
+        <a class="btn btn-ghost" href="/../index.html" target="_blank" rel="noopener">Ver sitio público</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div id="flash" class="flash" hidden></div>
+    <div id="error" class="error" hidden></div>
+
+    <!-- Vista lista -->
+    <section id="list-view">
+      <div class="toolbar" style="padding-top: 16px;">
+        <input class="search" type="search" id="search" placeholder="Buscar por nombre o frecuencia...">
+        <div class="band-filter" role="group">
+          <button type="button" id="filter-all" class="active">Todas</button>
+          <button type="button" id="filter-fm">FM</button>
+          <button type="button" id="filter-am">AM</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-new">Nueva estación</button>
+      </div>
+
+      <p class="muted" id="count"></p>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Frecuencia</th>
+              <th>Nombre</th>
+              <th class="col-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Vista edición -->
+    <section id="edit-view" hidden>
+      <form id="edit-form" class="edit-form">
+        <div class="form-head">
+          <button type="button" class="btn btn-ghost" id="btn-cancel">Cancelar</button>
+          <h2 id="edit-title">Editar estación</h2>
+        </div>
+
+        <fieldset>
+          <legend>Estación</legend>
+          <div class="row">
+            <div class="field">
+              <label>Banda</label>
+              <select id="edit-banda">
+                <option value="FM">FM</option>
+                <option value="AM">AM</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Frecuencia</label>
+              <input type="text" id="edit-frecuencia" required pattern="[0-9]+(\.[0-9]+)?">
+            </div>
+          </div>
+          <div class="field">
+            <label>Nombre</label>
+            <input type="text" id="edit-nombre" required>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="edit-verificado">
+            <span>Verificada</span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Contactos</legend>
+          <div id="contactos"></div>
+          <div>
+            <button type="button" class="btn btn-small" id="btn-add-contact">Añadir contacto</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Programas</legend>
+          <div id="programas"></div>
+          <div>
+            <button type="button" class="btn btn-small" id="btn-add-programa">Añadir programa</button>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="button" class="btn btn-danger" id="btn-delete" hidden>Eliminar estación</button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <script src="/admin.js"></script>
+</body>
+</html>
