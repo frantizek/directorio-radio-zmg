@@ -1,0 +1,642 @@
+{
+  "estaciones": [
+    {
+      "id": "fm-88.7",
+      "banda": "FM",
+      "frecuencia": "88.7",
+      "nombre": "ArrobaFM",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "telefono",
+          "valor": "523338250887"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-89.1",
+      "banda": "FM",
+      "frecuencia": "89.1",
+      "nombre": "RMX",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "fm-89.9",
+      "banda": "FM",
+      "frecuencia": "89.9",
+      "nombre": "Magia Digital",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523319727663"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-90.3",
+      "banda": "FM",
+      "frecuencia": "90.3",
+      "nombre": "Match FM",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523311885013"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-90.7",
+      "banda": "FM",
+      "frecuencia": "90.7",
+      "nombre": "Señal 90",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338131313"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-91.5",
+      "banda": "FM",
+      "frecuencia": "91.5",
+      "nombre": "Zona Tres",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523318807641"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-91.9",
+      "banda": "FM",
+      "frecuencia": "91.9",
+      "nombre": "Rock & Soul",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523314099399"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-92.3",
+      "banda": "FM",
+      "frecuencia": "92.3",
+      "nombre": "Fiesta Mexicana",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523331219230"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-92.7",
+      "banda": "FM",
+      "frecuencia": "92.7",
+      "nombre": "Radio Mujer",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "fm-93.1",
+      "banda": "FM",
+      "frecuencia": "93.1",
+      "nombre": "Amor 93.1",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523310197931"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-93.9",
+      "banda": "FM",
+      "frecuencia": "93.9",
+      "nombre": "Imagen Radio Guadalajara",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "525519516846"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-94.7",
+      "banda": "FM",
+      "frecuencia": "94.7",
+      "nombre": "KY 94.7",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523328233699"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-95.5",
+      "banda": "FM",
+      "frecuencia": "95.5",
+      "nombre": "La Mejor",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523319747955"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-95.9",
+      "banda": "FM",
+      "frecuencia": "95.9",
+      "nombre": "Vox Radio Hits",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523319747955"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-96.3",
+      "banda": "FM",
+      "frecuencia": "96.3",
+      "nombre": "Jalisco Radio",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "fm-97.1",
+      "banda": "FM",
+      "frecuencia": "97.1",
+      "nombre": "La Ke Buena",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338120971"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-97.9",
+      "banda": "FM",
+      "frecuencia": "97.9",
+      "nombre": "Fórmula Melódica",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338120971"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-98.7",
+      "banda": "FM",
+      "frecuencia": "98.7",
+      "nombre": "Globo",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "fm-99.5",
+      "banda": "FM",
+      "frecuencia": "99.5",
+      "nombre": "Romance",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523314099408"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-99.9",
+      "banda": "FM",
+      "frecuencia": "99.9",
+      "nombre": "Exa FM",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523310197999"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-100.3",
+      "banda": "FM",
+      "frecuencia": "100.3",
+      "nombre": "Heraldo Radio",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523331221190"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-101.1",
+      "banda": "FM",
+      "frecuencia": "101.1",
+      "nombre": "Exa FM 101.1",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338131313"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-101.9",
+      "banda": "FM",
+      "frecuencia": "101.9",
+      "nombre": "La Buena Onda",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338131313"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-102.7",
+      "banda": "FM",
+      "frecuencia": "102.7",
+      "nombre": "Los 40",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523336471027"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-103.5",
+      "banda": "FM",
+      "frecuencia": "103.5",
+      "nombre": "La Tapatia",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523336471027"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-104.3",
+      "banda": "FM",
+      "frecuencia": "104.3",
+      "nombre": "Radio UdeG",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "telefono",
+          "valor": "523317160006"
+        },
+        {
+          "tipo": "whatsapp",
+          "valor": "523320536975",
+          "etiqueta": "General",
+          "verificado": true
+        }
+      ],
+      "programas": [
+        {
+          "nombre": "El Expreso de las Diez",
+          "horario": null,
+          "dias": [],
+          "locutores": [],
+          "contactos": [
+            {
+              "tipo": "whatsapp",
+              "valor": "523320303232",
+              "etiqueta": "Programa",
+              "verificado": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fm-105.1",
+      "banda": "FM",
+      "frecuencia": "105.1",
+      "nombre": "Milenio Bella Musica",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "fm-105.9",
+      "banda": "FM",
+      "frecuencia": "105.9",
+      "nombre": "Éxtasis Digital",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523314040979"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-106.7",
+      "banda": "FM",
+      "frecuencia": "106.7",
+      "nombre": "Máxima FM",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523311990735"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "fm-107.5",
+      "banda": "FM",
+      "frecuencia": "107.5",
+      "nombre": "Retro 107.5",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523334677220"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-580",
+      "banda": "AM",
+      "frecuencia": "580",
+      "nombre": "Radio 580",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523331221190"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-630",
+      "banda": "AM",
+      "frecuencia": "630",
+      "nombre": "Jalisco Radio",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523336780094"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-710",
+      "banda": "AM",
+      "frecuencia": "710",
+      "nombre": "Radio María",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523323012294"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-760",
+      "banda": "AM",
+      "frecuencia": "760",
+      "nombre": "Radio Cañón",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "am-790",
+      "banda": "AM",
+      "frecuencia": "790",
+      "nombre": "W Radio",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "525513812222"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-850",
+      "banda": "AM",
+      "frecuencia": "850",
+      "nombre": "Notisistema",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523318808692"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-920",
+      "banda": "AM",
+      "frecuencia": "920",
+      "nombre": "La Voz de la FE",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "am-1010",
+      "banda": "AM",
+      "frecuencia": "1010",
+      "nombre": "Radio Ranchito",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338123790"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1070",
+      "banda": "AM",
+      "frecuencia": "1070",
+      "nombre": "Radio Vital",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338131313"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1110",
+      "banda": "AM",
+      "frecuencia": "1110",
+      "nombre": "Radio Comerciales",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "am-1150",
+      "banda": "AM",
+      "frecuencia": "1150",
+      "nombre": "Radio Metrópoli",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523311551962"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1190",
+      "banda": "AM",
+      "frecuencia": "1190",
+      "nombre": "W Radio Guadalajara",
+      "verificado": false,
+      "contactos": [],
+      "programas": []
+    },
+    {
+      "id": "am-1250",
+      "banda": "AM",
+      "frecuencia": "1250",
+      "nombre": "DK 1250",
+      "verificado": true,
+      "contactos": [
+        {
+          "tipo": "telefono",
+          "valor": "523336477481"
+        },
+        {
+          "tipo": "whatsapp",
+          "valor": "523329449080"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1310",
+      "banda": "AM",
+      "frecuencia": "1310",
+      "nombre": "Radio Vital",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338131313"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1340",
+      "banda": "AM",
+      "frecuencia": "1340",
+      "nombre": "Frecuencia Deportiva",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523331225933"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1410",
+      "banda": "AM",
+      "frecuencia": "1410",
+      "nombre": "Campirana",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523338122510"
+        }
+      ],
+      "programas": []
+    },
+    {
+      "id": "am-1480",
+      "banda": "AM",
+      "frecuencia": "1480",
+      "nombre": "Ondas de la Alegría",
+      "verificado": false,
+      "contactos": [
+        {
+          "tipo": "whatsapp",
+          "valor": "523336780094"
+        }
+      ],
+      "programas": []
+    }
+  ]
+}
