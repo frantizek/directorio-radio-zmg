@@ -5,7 +5,7 @@
       "banda": "FM",
       "frecuencia": "88.7",
       "nombre": "ArrobaFM",
-      "verificado": true,
+      "verificado": false,
       "contactos": [
         {
           "tipo": "telefono",
@@ -18,7 +18,7 @@
       "id": "fm-89.1",
       "banda": "FM",
       "frecuencia": "89.1",
-      "nombre": "RMX",
+      "nombre": "La Bestia Grupera",
       "verificado": false,
       "contactos": [],
       "programas": []
@@ -46,7 +46,7 @@
       "banda": "FM",
       "frecuencia": "89.9",
       "nombre": "Magia Digital",
-      "verificado": true,
+      "verificado": false,
       "contactos": [
         {
           "tipo": "whatsapp",
@@ -508,7 +508,12 @@
           "locutores": [
             "Gonzalo Oliveros"
           ],
-          "contactos": []
+          "contactos": [
+            {
+              "tipo": "whatsapp",
+              "valor": "523350701075"
+            }
+          ]
         }
       ]
     },
