@@ -15,16 +15,96 @@ Para desplegarlo en otro repositorio:
 
 ## Cómo editar los datos
 
-- La **fuente de verdad** es `data/estaciones.json`.
-- Para hacer correcciones, levanta el **panel de administración local**:
+La **fuente de verdad** es `data/estaciones.json`. Las tablas del README se generan a partir
+de ese archivo, así que **nunca las edites a mano**.
 
-  ```bash
-  uv run python scripts/admin_server.py
-  ```
+### Requisitos
 
-  Se abre en **http://127.0.0.1:8001** (solo accesible desde tu máquina). Ahí puedes añadir, editar o eliminar estaciones, contactos y programas. Cada guardado normaliza los datos, escribe `data/estaciones.json` y regenera el README automáticamente.
-- Después de editar, sube los cambios al repositorio con `git add` + `git commit` + `git push`.
-- Un workflow de **GitHub Actions** (`.github/workflows/ci.yml`) valida los datos en cada push/PR: tests, linter, sintaxis del frontend y que el README esté sincronizado con el JSON.
+- Python 3.11 o superior.
+- [`uv`](https://docs.astral.sh/uv/), el gestor del proyecto. No uses `pip`.
+
+### Paso 1 — Levanta el panel de administración
+
+```bash
+uv run python scripts/admin_server.py
+```
+
+Abre **http://127.0.0.1:8001**. El panel solo escucha en tu máquina (`127.0.0.1`), no tiene
+login y **no publica nada**: lo que edites se queda en tu disco hasta que lo subas.
+
+### Paso 2 — Elige la estación
+
+En la lista, busca por nombre o frecuencia, o filtra por **FM** / **AM**:
+
+- **Editar** — corregir una estación que ya existe.
+- **Nueva estación** — agregar una.
+- **Eliminar** — borrar una (solo dentro del formulario de edición).
+
+### Paso 3 — Corrige los datos
+
+- **Estación** — banda, frecuencia, nombre y la casilla **Verificada**.
+- **Contactos** — teléfono, WhatsApp, redes sociales, web o email. Cada botón **Añadir
+  contacto** agrega una fila; **Quitar** la elimina.
+- **Programas** — nombre, horario, días y locutores. Cada programa puede tener sus propios
+  contactos.
+
+Marca **Verificada** solo si confirmaste el contacto (llamada o WhatsApp respondido). Si
+solo lo copiaste de un sitio web, déjalo sin marcar.
+
+### Paso 4 — Guarda
+
+Pulsa **Guardar cambios**. Cada guardado hace tres cosas:
+
+1. normaliza y valida los datos,
+2. escribe `data/estaciones.json`, y
+3. regenera las tablas del `README.md`.
+
+**No necesitas correr `uv run python scripts/generate_readme.py` después de editar con el
+panel**: el README ya queda al día en el mismo guardado.
+
+### Paso 5 — Revisa qué cambió
+
+```bash
+git diff
+```
+
+Deberías ver los cambios en `data/estaciones.json` **y** en las tablas del `README.md`. Si
+solo aparece el JSON, regenera el README a mano (ver *Si CI falla* más abajo).
+
+### Paso 6 — Sube los cambios
+
+```bash
+git add data/estaciones.json README.md
+git commit -m "datos: corrige <estación>"
+git push
+```
+
+Abre un Pull Request. Un workflow de **GitHub Actions** (`.github/workflows/ci.yml`) valida
+en cada push y PR: tests, linter, sintaxis del frontend y que el README esté sincronizado
+con el JSON.
+
+## Si CI falla con "README sincronizado con el JSON"
+
+Editar con el panel mantiene el README al día, pero un **merge o rebase con `main`** puede
+descartar la regeneración del README y dejar los dos archivos desincronizados. Es el único
+caso en que hace falta el comando manual:
+
+```bash
+uv run python scripts/generate_readme.py
+git add README.md
+git commit -m "docs: regenera el README"
+git push
+```
+
+## Reglas de datos
+
+El panel las aplica por ti, pero conviene conocerlas:
+
+- **Teléfonos y WhatsApp** en formato E.164: `52` seguido de 10 dígitos (`523381231234`).
+- **Días** de programa en ISO: `1` = lunes ... `7` = domingo.
+- **Tipos de contacto** permitidos: `telefono`, `whatsapp`, `telegram`, `instagram`,
+  `facebook`, `x`, `threads`, `tiktok`, `youtube`, `tunein`, `iheart`, `web`, `email`.
+- **Una frecuencia no puede repetirse dentro de la misma banda.**
 
 ## Estructura del proyecto
 
