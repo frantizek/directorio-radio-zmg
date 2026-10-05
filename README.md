@@ -57,10 +57,10 @@ python -m http.server 8000               # servir la web localmente
 <!-- TABLA_FM -->
 | Frecuencia | Nombre de la Estación y Programas | ☎️ Teléfono Fijo | Número de WhatsApp | Verificado |
 | :--- |:------------------------------------------------| :--- |:---------------------------------------------------------|:-----------|
-| 88.7 MHz | **ArrobaFM** | 3338250887 | `No disponible` | ✅ |
-| 89.1 MHz | **RMX** |  | `No disponible` |  |
+| 88.7 MHz | **ArrobaFM** | 3338250887 | `No disponible` |  |
+| 89.1 MHz | **La Bestia Grupera** |  | `No disponible` |  |
 | 89.5 MHz | **Radio Fórmula Jalisco** |  | `No disponible` |  |
-| 89.9 MHz | **Magia Digital** |  | [33 1972 7663](http://wa.me/523319727663) | ✅ |
+| 89.9 MHz | **Magia Digital** |  | [33 1972 7663](http://wa.me/523319727663) |  |
 | 90.3 MHz | **Match FM** |  | [33 1188 5013](http://wa.me/523311885013) |  |
 | 90.7 MHz | **Señal 90** |  | [33 3813 1313](http://wa.me/523338131313) |  |
 | 91.5 MHz | **Zona Tres** |  | [33 1880 7641](http://wa.me/523318807641) | ✅ |
